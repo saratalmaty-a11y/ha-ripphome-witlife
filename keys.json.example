@@ -1,0 +1,5 @@
+{
+  "key_enc":  "<16-byte hex: encrypt key, CipherType 0x0238ee61>",
+  "key_priv": "<16-byte hex: privacy key, CipherType 0x0238ee41>",
+  "dst":      "4d37"
+}

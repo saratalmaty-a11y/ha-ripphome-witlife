@@ -1,0 +1,15 @@
+# secrets — never commit your network keys
+keys.json
+*.key
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# vendor / evidence (proprietary, do not publish)
+evidence/
+*witlife-so*
+*witlife-decompiled*
+out/

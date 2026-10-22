@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "RippHome / Wit Life lamp",
+        "description": "Enter your mesh network keys and the lamp ShortId. Keys are stored only in Home Assistant and never leave your network.",
+        "data": {
+          "name": "Name",
+          "key_enc": "Encrypt key (16-byte hex)",
+          "key_priv": "Privacy key (16-byte hex)",
+          "dst": "Lamp ShortId (2-byte hex, e.g. 4d37)",
+          "transmitter": "Transmitter (btmgmt or log)",
+          "hci_index": "Bluetooth adapter index",
+          "repeat": "Broadcast repeats per command"
+        }
+      }
+    },
+    "error": { "invalid_hex": "One of the hex fields has the wrong length/format." },
+    "abort": { "already_configured": "This lamp is already configured." }
+  }
+}

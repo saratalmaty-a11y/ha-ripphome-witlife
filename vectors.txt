@@ -1,0 +1,22 @@
+# RippHome FastCon-mesh — live-captured, verified (command -> frame) vectors.
+# Used by verify.py. Frames are ciphertext of THIS network (no key is revealed).
+#
+# label      SEQ  TID  FLAG ATTR VAL
+# plaintext(22) = 72 80 a0 00 SEQ 7c 00 | DST(4d37) TID F ATTR VAL 00*9
+# nonce(13)     = 00 80 a0 00 SEQ 7c 00 00 00 00 00 00 01
+# frame(26)     = 72 | (PECB[0:6] XOR 80 a0 00 SEQ 7c 00) | CCM
+
+ON         SEQ=0b TID=46 FLAG=d6 ATTR=10 VAL=01
+  plaintext 7280a0000b7c004d3746d61001000000000000000000
+  nonce     0080a0000b7c00000000000001
+  frame     72a44d1346ffad2721ec1d739201cfa35d6d0d5f95e98c959a9a
+
+BRIGHT_9e  SEQ=17 TID=52 FLAG=d6 ATTR=11 VAL=9e
+  plaintext 7280a000177c004d3752d6119e000000000000000000
+  nonce     0080a000177c00000000000001
+  frame     72c457203ee1487f1570660fa38578956b2febf41958ed3626d6
+
+CCT_ff     SEQ=00 TID=1e FLAG=d6 ATTR=13 VAL=ff
+  plaintext 7280a000007c004d371ed613ff000000000000000000
+  nonce     0080a000007c00000000000001
+  frame     72a7112da9cd0934eb5092e6a1e4fcefd6c3f363e5f85b3032f7

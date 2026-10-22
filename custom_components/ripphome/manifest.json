@@ -1,0 +1,13 @@
+{
+  "domain": "ripphome",
+  "name": "RippHome / Wit Life (FastCon mesh)",
+  "version": "0.1.0",
+  "documentation": "https://github.com/saratalmaty-a11y/ha-ripphome-witlife",
+  "issue_tracker": "https://github.com/saratalmaty-a11y/ha-ripphome-witlife/issues",
+  "codeowners": [],
+  "dependencies": [],
+  "requirements": ["pycryptodome>=3.20"],
+  "iot_class": "local_push",
+  "integration_type": "hub",
+  "config_flow": true
+}
