@@ -11,8 +11,14 @@ ATTR_ONOFF = 0x10
 ATTR_BRIGHTNESS = 0x11
 ATTR_COLORTEMP = 0x13
 
-_HDR_12 = bytes([0x80, 0xA0, 0x00])
-_HDR_56 = bytes([0x7C, 0x00])
+# Network-header bytes.  Byte 1 is (CTL<<7)|TTL (see docs/SPEC.md): the CCM nonce
+# uses the app's fixed 0x80 there, but the *obfuscated* on-air header carries the
+# access-message value 0x00 (CTL=0, TTL=0). The lamp authenticates via the fixed
+# nonce and does not check this byte, so 0x00 is the correct, session-independent
+# value for a transmitter. Hard-coding 0x80 here was the bug independent captures exposed.
+_NONCE_12 = bytes([0x80, 0xA0, 0x00])   # for the CCM nonce (fixed, as the app builds it)
+_OBF_12 = bytes([0x00, 0xA0, 0x00])     # network header bytes 1..3, byte1=(CTL<<7)|TTL=0
+_HDR_56 = bytes([0x7C, 0x00])           # network header bytes 5..6
 DEFAULT_FLAG = 0xD6
 
 
@@ -34,13 +40,14 @@ class RippMeshCodec:
                     flag: int = DEFAULT_FLAG) -> bytes:
         seq &= 0xFF
         tid &= 0xFF
-        p_hdr = bytes([0x72]) + _HDR_12 + bytes([seq]) + _HDR_56
+        nonce_hdr = _NONCE_12 + bytes([seq]) + _HDR_56   # 80 a0 00 SEQ 7c 00 (CCM nonce)
+        obf_hdr = _OBF_12 + bytes([seq]) + _HDR_56        # 00 a0 00 SEQ 7c 00 (on-air header 1..6)
         payload = self.dst + bytes([tid, flag, attr, val]) + b"\x00" * 9
-        nonce = b"\x00" + p_hdr[1:7] + b"\x00" * 5 + b"\x01"
+        nonce = b"\x00" + nonce_hdr + b"\x00" * 5 + b"\x01"
         c = AES.new(self.key_enc, AES.MODE_CCM, nonce=nonce, mac_len=4)
         ccm = c.encrypt(payload) + c.digest()
         pecb = AES.new(self.key_priv, AES.MODE_ECB).encrypt(b"\x00" * 8 + b"\x01" + ccm[:7])
-        obf = bytes(a ^ b for a, b in zip(pecb[:6], p_hdr[1:7]))
+        obf = bytes(a ^ b for a, b in zip(pecb[:6], obf_hdr))
         return bytes([0x72]) + obf + ccm
 
     def build_adv(self, *a, **kw) -> bytes:

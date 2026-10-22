@@ -8,14 +8,15 @@ import json, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "custom_components", "ripphome"))
 from codec import RippMeshCodec, ATTR_ONOFF, ATTR_BRIGHTNESS, ATTR_COLORTEMP, DEFAULT_FLAG
 
-# (label, SEQ, TID, FLAG, ATTR, VAL, expected 26-byte frame) — live captured & verified
+# (label, SEQ, TID, FLAG, ATTR, VAL, expected 26-byte frame)
+# Independent live captures (not used to derive the header byte) — see docs/SPEC.md.
 VECTORS = [
-    ("ON       ", 0x0b, 0x46, DEFAULT_FLAG, ATTR_ONOFF, 0x01,
-     "72a44d1346ffad2721ec1d739201cfa35d6d0d5f95e98c959a9a"),
-    ("BRIGHT 9e", 0x17, 0x52, DEFAULT_FLAG, ATTR_BRIGHTNESS, 0x9e,
-     "72c457203ee1487f1570660fa38578956b2febf41958ed3626d6"),
-    ("CCT ff   ", 0x00, 0x1e, DEFAULT_FLAG, ATTR_COLORTEMP, 0xff,
-     "72a7112da9cd0934eb5092e6a1e4fcefd6c3f363e5f85b3032f7"),
+    ("ON       ", 0x00, 0x3c, DEFAULT_FLAG, ATTR_ONOFF, 0x01,
+     "72a3c424c0206b34eb7292e55fe4fcefd6c3f363e5f842fc5665"),
+    ("BRIGHT 9e", 0x14, 0x50, DEFAULT_FLAG, ATTR_BRIGHTNESS, 0x9e,
+     "7294515232add1ecf2722b66c1e73e9a4739a4cd9ad80e34be97"),
+    ("CCT 00   ", 0x03, 0x23, DEFAULT_FLAG, ATTR_COLORTEMP, 0x00,
+     "72bf5d9e403d105c08c2946c84eba4a5c8d0b557936561fc77b9"),
 ]
 
 
